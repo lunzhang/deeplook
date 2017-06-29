@@ -101,7 +101,7 @@ exports = module.exports = __webpack_require__(2)();
 
 
 // module
-exports.push([module.i, "html, body {\n  height: 100%;\n  margin: 0px; }\n\n#img {\n  display: none; }\n", ""]);
+exports.push([module.i, "html, body {\n  height: 100%;\n  margin: 0px; }\n\n#img {\n  display: none; }\n\n#network-data {\n  font-size: 10px;\n  width: 500px;\n  height: 300px; }\n", ""]);
 
 // exports
 

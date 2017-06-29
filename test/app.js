@@ -1,14 +1,12 @@
-import DeepLook from '../build/bundle.js';
-import Hog from '../src/hog/hog.js';
+import DeepLook from '../src/app.js';
+import './training/test-network.js';
+import './training/train-network.js';
 
-window.onload = function() {
-  let img = document.getElementById('img');
-  let canvas = document.getElementById('canvas');
-  let imgData = getImageData(img,canvas);
-  Hog.drawMagnitude(canvas);
-}
+let img = new Image();
+img.src = './SuccessKid.jpg';
 
-function getImageData(img,canvas) {
+function getImageData(img) {
+    let canvas = document.createElement('canvas');
     canvas.width = img.width;
     canvas.height = img.height;
 
