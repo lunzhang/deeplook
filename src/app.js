@@ -15,6 +15,9 @@ class DeepLook {
     this.net.fromJSON(networkData);
     this.resize = 360;
     this.scaleStep = 6;
+    this.hogParams = {
+      cellSize: globals.CELL_SIZE
+    };
   }
 
   detectFaces(canvas){
@@ -25,17 +28,17 @@ class DeepLook {
       let face = this.detectAtScale(resize.imagedata, resize.scale);
       faces = faces.concat(face);
     }.bind(this));
-    faces = nms.combineOverlaps(faces, 0.5, 2);
+    faces = nms.combineOverlaps(faces, 0.25, 4);
     return faces;
   }
 
   detectAtScale(imageData,scale){
-    let histograms = Hog.extractHistograms(imageData,{});
+    let histograms = Hog.extractHistograms(imageData,this.hogParams);
     let faces = [];
     for(let y = 0; y + globals.PATCH_SIZE < imageData.height; y+=globals.CELL_SIZE ){
       for(let x = 0; x + globals.PATCH_SIZE < imageData.width; x+=globals.CELL_SIZE){
         let histRect = this.getRect(histograms, x / globals.CELL_SIZE, y / globals.CELL_SIZE, globals.PATCH_SIZE / globals.CELL_SIZE, globals.PATCH_SIZE / globals.CELL_SIZE);
-        let hog = Hog.extractHOGFromHistograms(histRect,{});
+        let hog = Hog.extractHOGFromHistograms(histRect,this.hogParams);
         let prob = this.net.runInput(hog)[0];
 
         if(prob > .999){
