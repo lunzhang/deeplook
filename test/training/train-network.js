@@ -69,7 +69,7 @@ export default function trainNetwork(net) {
     });
     let trainedData = JSON.stringify(net.toJSON());
     let textarea = document.getElementById('network-data');
-    //textarea.value = trainedData;
+    textarea.value = trainedData;
   }
 
 }

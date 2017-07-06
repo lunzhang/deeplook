@@ -3,7 +3,7 @@ import trainNetwork from './training/train-network.js';
 import * as globals from '../globals.js';
 
 let img = new Image();
-img.src = './cat.jpg';
+img.src = './SuccessKid.jpg';
 let canvas = document.getElementById('test-canvas');
 
 // Copy the image contents to the canvas
@@ -11,18 +11,18 @@ let ctx = canvas.getContext("2d");
 let dataURL;
 
 img.onload = function(){
+  canvas.width = img.width;
+  canvas.height = img.height;
   ctx.drawImage(img, 0, 0,img.width,img.height,0,0,canvas.width,canvas.height);
 }
 
 window.test = function(){
     let faces = DeepLook.detectFaces(canvas);
-    console.log(faces);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "red";
     for(let i = 0;i<faces.length;i++){
       let face = faces[i];
-      ctx.fillStyle="#FF0000";
-      ctx.beginPath();
-      ctx.arc(face.x, face.y, 3, 0, 2 * Math.PI);
-      ctx.fill();
+      ctx.strokeRect(face.x, face.y, face.width, face.height);
     }
 };
 

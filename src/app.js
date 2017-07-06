@@ -25,7 +25,7 @@ class DeepLook {
       let face = this.detectAtScale(resize.imagedata, resize.scale);
       faces = faces.concat(face);
     }.bind(this));
-    faces = this.combineOverlaps(faces, 0.5, 2);
+    faces = nms.combineOverlaps(faces, 0.5, 2);
     return faces;
   }
 
@@ -113,11 +113,6 @@ class DeepLook {
     canvas.setAttribute('width', width);
     canvas.setAttribute('height', height);
     return canvas;
-  }
-
-  combineOverlaps(rects, overlapThresh, minOverlaps) {
-    let faces = nms.combineOverlaps(rects, overlapThresh, minOverlaps);
-    return faces;
   }
 
 }
