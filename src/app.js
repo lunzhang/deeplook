@@ -2,17 +2,13 @@ import Hog from 'hog-descriptor';
 import brain from 'brain';
 import networkData from './network-data';
 import * as globals from '../globals.js';
-import nms from './nm.js';
+import nms from './nms.js';
 
 class DeepLook {
 
   constructor(){
     this.Hog = Hog;
-    this.net = new brain.NeuralNetwork({
-      hiddenLayers: [10, 10],
-      learningRate: 0.2
-    });
-    this.net.fromJSON(networkData);
+    this.net = new brain.NeuralNetwork().fromJSON(networkData);
     this.resize = 360;
     this.scaleStep = 6;
     this.hogParams = {
@@ -21,8 +17,7 @@ class DeepLook {
   }
 
   detectFaces(canvas){
-    let resizes = this.getAllSizes(canvas, 48);
-
+    let resizes = this.getAllSizes(canvas, globals.PATCH_SIZE);
     let faces = [];
     resizes.forEach(function(resize) {
       let face = this.detectAtScale(resize.imagedata, resize.scale);
@@ -40,14 +35,13 @@ class DeepLook {
         let histRect = this.getRect(histograms, x / globals.CELL_SIZE, y / globals.CELL_SIZE, globals.PATCH_SIZE / globals.CELL_SIZE, globals.PATCH_SIZE / globals.CELL_SIZE);
         let hog = Hog.extractHOGFromHistograms(histRect,this.hogParams);
         let prob = this.net.runInput(hog)[0];
-
-        if(prob > .999){
+        if(prob > .9998){
           faces.push({
             x: Math.floor(x / scale),
             y: Math.floor(y / scale),
             width: Math.floor(globals.PATCH_SIZE / scale),
             height: Math.floor(globals.PATCH_SIZE / scale),
-            prob
+            value: prob
           });
         }
 
@@ -68,9 +62,6 @@ class DeepLook {
   }
 
   getAllSizes(canvas, minSize){
-    // For use with Worker threads, return canvas ImageDatas
-    // resized to accomodate letious window sizes
-
     minSize = minSize;
 
     // resize canvas to cut down on number of windows to check
@@ -86,7 +77,7 @@ class DeepLook {
         imagedata: imagedata,
         scale: winScale,
         size: size
-      })
+      });
     }
     return resizes;
   }
