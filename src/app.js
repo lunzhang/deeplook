@@ -28,6 +28,7 @@ class DeepLook {
       let face = this.detectAtScale(resize.imagedata, resize.scale);
       faces = faces.concat(face);
     }.bind(this));
+    console.log(faces);
     faces = nms.combineOverlaps(faces, params.overlapThresh, params.minOverlaps);
     return faces;
   }

@@ -14,7 +14,7 @@ img.onload = function(){
   canvas.width = img.width;
   canvas.height = img.height;
   ctx.drawImage(img, 0, 0,img.width,img.height,0,0,canvas.width,canvas.height);
-}
+};
 
 window.test = function(){
     let faces = DeepLook.detectFaces(canvas);
