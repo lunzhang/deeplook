@@ -4,16 +4,21 @@ import networkData from './network-data';
 import * as globals from '../globals.js';
 import nms from './nms.js';
 
+var params = {
+    hog:{
+      cellSize: globals.CELL_SIZE
+    },
+    resize : 360,
+    scaleStep : 6,
+    overlapThresh : 0.25,
+    minOverlaps : 4,
+    accuracy: .9998 //percent matching to be a face
+};
+
 class DeepLook {
 
   constructor(){
-    this.Hog = Hog;
     this.net = new brain.NeuralNetwork().fromJSON(networkData);
-    this.resize = 360;
-    this.scaleStep = 6;
-    this.hogParams = {
-      cellSize: globals.CELL_SIZE
-    };
   }
 
   detectFaces(canvas){
@@ -23,19 +28,19 @@ class DeepLook {
       let face = this.detectAtScale(resize.imagedata, resize.scale);
       faces = faces.concat(face);
     }.bind(this));
-    faces = nms.combineOverlaps(faces, 0.25, 4);
+    faces = nms.combineOverlaps(faces, params.overlapThresh, params.minOverlaps);
     return faces;
   }
 
   detectAtScale(imageData,scale){
-    let histograms = Hog.extractHistograms(imageData,this.hogParams);
+    let histograms = Hog.extractHistograms(imageData,params.hog);
     let faces = [];
     for(let y = 0; y + globals.PATCH_SIZE < imageData.height; y+=globals.CELL_SIZE ){
       for(let x = 0; x + globals.PATCH_SIZE < imageData.width; x+=globals.CELL_SIZE){
         let histRect = this.getRect(histograms, x / globals.CELL_SIZE, y / globals.CELL_SIZE, globals.PATCH_SIZE / globals.CELL_SIZE, globals.PATCH_SIZE / globals.CELL_SIZE);
-        let hog = Hog.extractHOGFromHistograms(histRect,this.hogParams);
+        let hog = Hog.extractHOGFromHistograms(histRect,params.hog);
         let prob = this.net.runInput(hog)[0];
-        if(prob > .9998){
+        if(prob > params.accuracy){
           faces.push({
             x: Math.floor(x / scale),
             y: Math.floor(y / scale),
@@ -44,7 +49,6 @@ class DeepLook {
             value: prob
           });
         }
-
       }
     }
     return faces;
@@ -66,10 +70,10 @@ class DeepLook {
 
     // resize canvas to cut down on number of windows to check
     let max = Math.max(canvas.width, canvas.height)
-    let scale = Math.min(max, this.resize) / max;
+    let scale = Math.min(max, params.resize) / max;
 
     let resizes = [];
-    for (let size = minSize; size < max; size += this.scaleStep) {
+    for (let size = minSize; size < max; size += params.scaleStep) {
       let winScale = (minSize / size) * scale;
       let imagedata = this.scaleCanvas(canvas, winScale);
 
