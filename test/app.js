@@ -1,5 +1,5 @@
-import DeepLook from '../src/app.js';
-import trainNetwork from './training/train-network.js';
+import trainNetworkLocal from './training/train-network-local.js';
+import trainNetworkGoogle from './training/train-network-google.js';
 import * as globals from '../globals.js';
 
 let img = new Image();
@@ -26,6 +26,10 @@ window.test = function(){
     }
 };
 
-window.trainNetwork = function(){
-    trainNetwork(DeepLook.net);
+window.trainNetworkLocal = function(){
+    trainNetworkLocal();
+};
+
+window.trainNetworkGoogle = function(){
+    trainNetworkGoogle();
 };
