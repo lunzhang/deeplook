@@ -1,9 +1,9 @@
-import DeepLook from '../../src/app.js';
+import DeepLook from '../../../src/app.js';
 import brain from 'brain';
 import Hog from 'hog-descriptor';
-import * as globals from '../../globals.js';
-import * as faces from './google/faces.json';
-import * as nonfaces from './google/nonfaces.json';
+import * as globals from '../../../globals.js';
+import * as faces from './faces.json';
+import * as nonfaces from './nonfaces.json';
 
 const net = DeepLook.net;
 const faceSrcs = faces.srcs;

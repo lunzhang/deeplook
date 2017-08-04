@@ -1,7 +1,7 @@
-import DeepLook from '../../src/app.js';
+import DeepLook from '../../../src/app.js';
 import brain from 'brain';
 import Hog from 'hog-descriptor';
-import * as globals from '../../globals.js';
+import * as globals from '../../../globals.js';
 
 const net = DeepLook.net;
 
@@ -22,7 +22,7 @@ export default function trainNetworkLocal() {
   //extract data from FACE_DATASET
   for(let i = 1;i<dataCount;i++){
     let img = new Image();
-    img.src = "./training/imgs/FACE_DATASET/download ("+i+").jpg";
+    img.src = "./FACE_DATASET/download ("+i+").jpg";
     (function(img){
       img.onload = function(){
         ctx.drawImage(img, 0, 0,img.width,img.height,0,0,globals.PATCH_SIZE,globals.PATCH_SIZE);
@@ -42,7 +42,7 @@ export default function trainNetworkLocal() {
   //extract data from NON_FACE_DATASET
   for(let i = 1;i<dataCount;i++){
     let img = new Image();
-    img.src = "./training/imgs/NON_FACE_DATASET/download ("+i+").jpg";
+    img.src = "./NON_FACE_DATASET/download ("+i+").jpg";
 
     (function(img){
       img.onload = function(){
