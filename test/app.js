@@ -1,3 +1,4 @@
+import DeepLook from '../src/app.js';
 import trainNetworkLocal from './training/train-network-local.js';
 import trainNetworkGoogle from './training/train-network-google.js';
 import * as globals from '../globals.js';
