@@ -15,7 +15,6 @@ export default function trainNetworkGoogle() {
       cellSize : globals.CELL_SIZE
   };
   let data = [];
-  let dataCount = faceSrcs.length;
   let extractCount = 0;
   let canvas = document.createElement('canvas');
   let ctx = canvas.getContext("2d");
