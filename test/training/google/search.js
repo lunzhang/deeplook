@@ -23,6 +23,7 @@ var faceQuery = ['baby','boy','girl','man','woman',
 'russian baby','russian boy','russian girl','russian man','russian woman'];
 var faceCount = 25;
 var faceUrls = [];
+var faceSrcs = [];
 var facesDir = './test/training/google/faces.json';
 
 for(var i = 0;i<faceQuery.length;i++){
@@ -55,6 +56,7 @@ var nonfaceQuery = ['beaver', 'dolphin', 'otter', 'seal', 'whale',
 'monkey','gorilla','apes','chimpanzee'];
 var nonfaceCount = 25;
 var nonfaceUrls = [];
+var nonfaceSrcs = [];
 var nonfacesDir = './test/training/google/nonfaces.json';
 
 for(var i = 0;i<nonfaceQuery.length;i++){
@@ -81,19 +83,13 @@ function fetchData(query,url,dir,fetch){
       }
     }
 
-    try{
-      var data = fs.readFileSync(dir,'utf8');
-      //if file exists add to file
-      data = JSON.parse(data).srcs;
-      srcs = srcs.concat(data);
-      fs.writeFileSync(dir,JSON.stringify({srcs}));
-    }catch(err){
-      //if file doesn't exist write to file
-      fs.writeFileSync(dir,JSON.stringify({srcs}));
+    if(fetch){
+      nonfaceSrcs = nonfaceSrcs.concat(srcs);
+      setTimeout(fetchNext,5000);
+    }else{
+      faceSrcs = faceSrcs.concat(srcs);
     }
-
     console.log(query + ' data updated');
-    if(fetch)setTimeout(fetchNext,5000);
   });
 };
 
@@ -103,8 +99,23 @@ function fetchNext(){
       fetchData(nonfaceQuery[fetchCount],nonfaceUrls[fetchCount],nonfacesDir,true);
       fetchCount = fetchCount + 1;
     }else{
+      writeToFile(facesDir,faceSrcs);
+      writeToFile(nonfacesDir,nonfaceSrcs);
       console.log('done fetching');
     }
 };
+
+function writeToFile(dir,srcs){
+  try{
+    var data = fs.readFileSync(dir,'utf8');
+    //if file exists add to file
+    data = JSON.parse(data).srcs;
+    data = data.concat(srcs);
+    fs.writeFileSync(dir,JSON.stringify({srcs:data}));
+  }catch(err){
+    //if file doesn't exist write to file
+    fs.writeFileSync(dir,JSON.stringify({srcs}));
+  }
+}
 
 fetchNext();
